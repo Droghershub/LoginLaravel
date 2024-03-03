@@ -17,17 +17,22 @@ use App\Http\Controllers\AuthController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('login', [AuthController::class, 'index'])
+    ->middleware('guest')
+    ->name('login');
 
+Route::post('login', [AuthController::class, 'login'])
+    ->middleware(['guest', 'throttle:2,1'])
+    ->name('login');
 
+Route::get('register', [AuthController::class, 'register_view'])
+    ->middleware('guest')
+    ->name('register');
 
+Route::post('register', [AuthController::class, 'register'])
+    ->middleware(['guest', 'throttle:2,1'])
+    ->name('register');
 
-Route::group(['middleware'=>'guest'],function(){
-    Route::get('login',[AuthController::class,'index'])->name('login');
-    Route::post('login',[AuthController::class,'login'])->name('login')->middleware('throttle:2,1');
-
-    Route::get('register',[AuthController::class,'register_view'])->name('register');
-    Route::post('register',[AuthController::class,'register'])->name('register')->middleware('throttle:2,1');
-});
 
 
 
